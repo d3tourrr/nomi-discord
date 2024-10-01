@@ -1,17 +1,17 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"log"
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "log"
     "io/ioutil"
-	"net/http"
+    "net/http"
     "os"
-	"sync"
-	"time"
+    "time"
+    "sync"
 
-	"github.com/bwmarrin/discordgo"
+    "github.com/bwmarrin/discordgo"
 )
 
 type QueuedMessage struct {
@@ -20,45 +20,45 @@ type QueuedMessage struct {
 }
 
 type MessageQueue struct {
-	messages []QueuedMessage
-	mu       sync.Mutex
+    messages []QueuedMessage
+    mu       sync.Mutex
 }
 
 func (q *MessageQueue) Enqueue(message QueuedMessage) {
-	q.mu.Lock()
-	defer q.mu.Unlock()
-	q.messages = append(q.messages, message)
+    q.mu.Lock()
+    defer q.mu.Unlock()
+    q.messages = append(q.messages, message)
 }
 
 func (q *MessageQueue) Dequeue() (QueuedMessage, bool) {
-	q.mu.Lock()
-	defer q.mu.Unlock()
+    q.mu.Lock()
+    defer q.mu.Unlock()
 
-	if len(q.messages) == 0 {
-		return QueuedMessage{}, false
-	}
+    if len(q.messages) == 0 {
+        return QueuedMessage{}, false
+    }
 
-	message := q.messages[0]
-	q.messages = q.messages[1:]
-	return message, true
+    message := q.messages[0]
+    q.messages = q.messages[1:]
+    return message, true
 }
 
 func (q *MessageQueue) ProcessMessages() {
-	for {
-		queuedMessage, ok := q.Dequeue()
-		if !ok {
-			time.Sleep(1 * time.Second) // No messages in queue, sleep for a while
-			continue
-		}
+    for {
+        queuedMessage, ok := q.Dequeue()
+        if !ok {
+            time.Sleep(1 * time.Second) // No messages in queue, sleep for a while
+            continue
+        }
 
-		err := sendMessageToAPI(queuedMessage.Session, queuedMessage.Message)
-		if err != nil {
-			log.Printf("Failed to send message to API: %v", err)
-			q.Enqueue(queuedMessage) // Requeue the message if failed
-		}
+        err := sendMessageToAPI(queuedMessage.Session, queuedMessage.Message)
+        if err != nil {
+            log.Printf("Failed to send message to API: %v", err)
+            q.Enqueue(queuedMessage) // Requeue the message if failed
+        }
 
-		time.Sleep(5 * time.Second) // Try to keep from sending messages toooo quickly
-	}
+        time.Sleep(5 * time.Second) // Try to keep from sending messages toooo quickly
+    }
 }
 
 func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
@@ -127,8 +127,29 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
                 log.Fatalf("Error reading response. %v", err)
             }
 
+
             if resp.StatusCode != http.StatusOK {
                 log.Printf("Error response from Nomi API. %v", string(body))
+
+                // Sometimes Nomi responds with an error: {"error":{"type":"NoReply"}}
+                // The Nomi got the message and replied, but the reply wasn't sent back
+                var errorResult map[string]interface{}
+                if err := json.Unmarshal(body, &errorResult); err != nil {
+                    log.Fatalf("Error unmarshalling error response. %v", err)
+                }
+
+                if errorMessage, ok := errorResult["error"].(map[string]interface{}); ok {
+                    if typeValue, ok := errorMessage["type"].(string); ok {
+                        if typeValue == "NoReply" {
+                            log.Print("Sending 'Replied but you did not see it' message to Discord")
+                            // Send as a reply to the message that triggered the response, helps keep things orderly
+                            _, err := s.ChannelMessageSendReply(m.ChannelID, "I replied to your message but the Nomi API messed up and you don't get to see what I said.", m.Reference())
+                            if err != nil {
+                                fmt.Println("Error sending message: ", err)
+                            }
+                        }
+                    }
+                }
             }
 
             var result map[string]interface{}
@@ -154,17 +175,17 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// Ignore messages from the bot itself
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
+    // Ignore messages from the bot itself
+    if m.Author.ID == s.State.User.ID {
+        return
+    }
 
-	message := QueuedMessage{
+    message := QueuedMessage{
         Message: m,
         Session: s,
-	}
+    }
 
-	queue.Enqueue(message)
+    queue.Enqueue(message)
 }
 
 var queue MessageQueue
@@ -176,20 +197,20 @@ func main() {
         return
     }
 
-	dg, err := discordgo.New("Bot " + botToken)
-	if err != nil {
-		log.Fatalf("Error creating Discord session: %v", err)
-	}
+    dg, err := discordgo.New("Bot " + botToken)
+    if err != nil {
+        log.Fatalf("Error creating Discord session: %v", err)
+    }
 
-	dg.AddHandler(messageCreate)
+    dg.AddHandler(messageCreate)
 
-	err = dg.Open()
-	if err != nil {
-		log.Fatalf("Error opening connection: %v", err)
-	}
+    err = dg.Open()
+    if err != nil {
+        log.Fatalf("Error opening connection: %v", err)
+    }
 
-	go queue.ProcessMessages()
+    go queue.ProcessMessages()
 
-	fmt.Println("Bot is now running. Press CTRL+C to exit.")
-	select {}
+    fmt.Println("Bot is now running. Press CTRL+C to exit.")
+    select {}
 }
