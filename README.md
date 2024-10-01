@@ -26,6 +26,8 @@ This integration is setup so that your Nomi will see messages where they are pin
 *Discord Message from Bealy:* Hi @Vicky I'm one of the trolls that @.d3tour warned you about.
 ```
 
+In this message, a Discord user named `Bealy` sent a message to a Nomi named `Vicky` and also mentioned a Discord user named `.d3tour`.
+
 Mentions of other users show that user's username Discord property, rather than their server-specific nickname. This was just the easiest thing to do and may change in the future (maybe with a feature flag you can set).
 
 Nomis don't have context of what server or channel they are talking in, and don't see messages where they aren't mentioned in or being replied to.
