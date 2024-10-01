@@ -5,15 +5,15 @@
 # Setup
 
 1. Make a Discord Application and Bot
-  1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
-  2. Create a new application and then a bot under that application
-  3. Copy the bot's token
-  4. Add the bot to a server with the required permissions (at least "Read Messages" and "Send Messages")
+  *. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+  *. Create a new application and then a bot under that application
+  *. Copy the bot's token
+  *. Add the bot to a server with the required permissions (at least "Read Messages" and "Send Messages")
 2. Clone this repo: `git clone https://github.com/d3tourrr/nomi-discord.git`
 3. Build the Docker image: `docker build -t nomi-discord .`
 4. Get your Nomi API token
-  1. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
-  2. Copy the API key
+  *. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
+  *. Copy the API key
 5. Get the Nomi ID (see [Nomi API Doc: Listing your Nomis](https://api.nomi.ai/docs/#listing-your-nomis))
 6. Run the Docker container: `docker run -e DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN -e NOMI_TOKEN=$NOMI_TOKEN -e NOMI_ID=$NOMI_ID nomi-discord`
 7. Press `CTRL+C` to stop the container
