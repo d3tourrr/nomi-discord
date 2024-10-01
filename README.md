@@ -11,6 +11,7 @@
    1. Add the bot to a server with the required permissions (at least "Read Messages" and "Send Messages")
 1. Clone this repo: `git clone https://github.com/d3tourrr/nomi-discord.git`
 1. Build the Docker image: `docker build -t nomi-discord .`
+   1. Install Docker if you haven't already got it: [Instructions](https://docs.docker.com/engine/install/)
 1. Get your Nomi API token
    1. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
    1. Copy your API key
