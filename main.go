@@ -57,7 +57,7 @@ func (q *MessageQueue) ProcessMessages() {
 			q.Enqueue(queuedMessage) // Requeue the message if failed
 		}
 
-		time.Sleep(1 * time.Second) // Try to keep from sending messages toooo quickly
+		time.Sleep(5 * time.Second) // Try to keep from sending messages toooo quickly
 	}
 }
 
@@ -91,7 +91,7 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
 
             // Prefix messages sent to the Nomi so they know who they're from and that it's Discord
             // and not a normal Nomi app message
-            updatedMessage = "*Discord Message from " + m.Author.GlobalName + ":* " + updatedMessage
+            updatedMessage = "*Discord Message from " + m.Author.Username + ":* " + updatedMessage
 
             headers := map[string]string{
                 "Authorization": nomiToken,
