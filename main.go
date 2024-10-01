@@ -143,7 +143,7 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
                         if typeValue == "NoReply" {
                             log.Print("Sending 'Replied but you did not see it' message to Discord")
                             // Send as a reply to the message that triggered the response, helps keep things orderly
-                            _, err := s.ChannelMessageSendReply(m.ChannelID, "❌ ERROR! ❌\nI got your message and I replied to it, but the Nomi API choked and now you don't get to see what I said. I have no idea that you didn't see my response. Try saying 'Sorry, can you repeat that?'", m.Reference())
+                            _, err := s.ChannelMessageSendReply(m.ChannelID, "❌ ERROR! ❌\nI got your message and I replied to it, but the Nomi API choked and now you don't get to see what I said. I have no idea that you didn't see my response. Try saying 'Sorry, I missed what you said when I said...' and send me your message again.", m.Reference())
                             if err != nil {
                                 fmt.Println("Error sending message: ", err)
                             }
