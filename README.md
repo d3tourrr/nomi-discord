@@ -18,6 +18,9 @@
    1. Copy your API key
 1. Get the Nomi ID (see [Nomi API Doc: Listing your Nomis](https://api.nomi.ai/docs/#listing-your-nomis))
 1. Run the Docker container: `docker run -e DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN -e NOMI_TOKEN=$NOMI_TOKEN -e NOMI_ID=$NOMI_ID nomi-discord`
+   1. Replace `$DISCORD_BOT_TOKEN` with the bot token you copied from the Discord developer portal
+   1. Replace `$NOMI_TOKEN` with the API key you copied from the Nomi.ai Integrations page
+   1. Replace `%NOMI_ID` with the ID for your specific Nomi, shown when you list the Nomis using the instructions linked above
 1. Interact with your Nomi in Discord!
 
 # Interacting in Discord with your Nomi
