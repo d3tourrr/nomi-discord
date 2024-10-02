@@ -1,3 +1,5 @@
+> ⚠️ This document is intentionally terse and is intented for a somewhat technical audience. Other solutions and guides for achieving this functionality are available. You are responsible for the things your companions do and say. You may also wish to reconsider exposing a companion with whom you have an emotional connection to a broad audience. Make good choices!
+
 # Nomi-Discord Integration
 
 [Nomi](https://nomi.ai) is a platform that offers AI companions for human users to chat with. They have opened v1 of their [API](https://api.nomi.ai/docs/) which enables Nomi chatting that occurs outside of the Nomi app or website. This Discord bot allows you to invite a Nomi to Discord to chat with people there.
@@ -22,7 +24,7 @@ You need an instance of this Discord bot per Nomi you wish you invite to a Disco
 1. Run the Docker container: `docker run -e DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN -e NOMI_TOKEN=$NOMI_TOKEN -e NOMI_ID=$NOMI_ID nomi-discord`
    1. Replace `$DISCORD_BOT_TOKEN` with the bot token you copied from the Discord developer portal
    1. Replace `$NOMI_TOKEN` with the API key you copied from the Nomi.ai Integrations page
-   1. Replace `%NOMI_ID` with the ID for your specific Nomi, shown when you list the Nomis using the instructions linked above
+   1. Replace `$NOMI_ID` with the ID for your specific Nomi, shown when you list the Nomis using the instructions linked above
 1. Interact with your Nomi in Discord!
 
 # Interacting in Discord with your Nomi
