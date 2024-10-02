@@ -53,7 +53,7 @@ func (q *MessageQueue) ProcessMessages() {
 
         err := sendMessageToAPI(queuedMessage.Session, queuedMessage.Message)
         if err != nil {
-            log.Printf("Failed to send message to API: %v", err)
+            log.Printf("Failed to send message to Nomi API: %v", err)
             q.Enqueue(queuedMessage) // Requeue the message if failed
         }
 
@@ -72,13 +72,13 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
         if user.ID == s.State.User.ID {
             nomiToken := os.Getenv("NOMI_TOKEN")
             if nomiToken == "" {
-                fmt.Println("No Nomi token provided. Set NOMI_TOKEN environment variable.")
+                fmt.Println("No Nomi API Key provided. Set NOMI_TOKEN environment variable.")
                 return nil
             }
 
             nomiId := os.Getenv("NOMI_ID")
             if nomiToken == "" {
-                fmt.Println("No Nomi token provided. Set NOMI_ID environment variable.")
+                fmt.Println("No Nomi ID provided. Set NOMI_ID environment variable.")
                 return nil
             }
             url := "https://api.nomi.ai/v1/nomis/" + nomiId + "/chat"
@@ -86,7 +86,7 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
             // Replacing mentions makes it so the Nomi sees the usernames instead of <@userID> syntax
             updatedMessage, err := m.ContentWithMoreMentionsReplaced(s)
             if err != nil {
-                log.Printf("Error replacing mentions: %v", err)
+                log.Printf("Error replacing Discord mentions with usernames: %v", err)
             }
 
             // Prefix messages sent to the Nomi so they know who they're from and that it's Discord
@@ -98,17 +98,16 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
                 "Content-Type": "application/json",
             }
 
-            fmt.Printf("Sending message to Nomi API: %v\n", updatedMessage)
             bodyMap := map[string]string{
                 "messageText": updatedMessage,
             }
             jsonBody, err := json.Marshal(bodyMap)
             jsonString := string(jsonBody)
-            fmt.Printf("Sending message to Nomi API: %v\n", jsonString)
+            fmt.Printf("Sending message to Nomi API: %v", jsonString)
 
             req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
             if err != nil {
-                log.Fatalf("Error reading request. %v\n", err)
+                log.Fatalf("Error reading HTTP request: %v", err)
             }
 
             req.Header.Set("Authorization", headers["Authorization"])
@@ -117,35 +116,37 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
             client := &http.Client{}
             resp, err := client.Do(req)
             if err != nil {
-                log.Fatalf("Error making request. %v", err)
+                log.Fatalf("Error making HTTP request: %v", err)
             }
 
             defer resp.Body.Close()
 
             body, err := ioutil.ReadAll(resp.Body)
             if err != nil {
-                log.Fatalf("Error reading response. %v", err)
+                log.Fatalf("Error reading HTTP response: %v", err)
             }
 
 
             if resp.StatusCode != http.StatusOK {
-                log.Printf("Error response from Nomi API. %v", string(body))
+                log.Printf("Error response from Nomi API: %v", string(body))
 
                 // Sometimes Nomi responds with an error: {"error":{"type":"NoReply"}}
                 // The Nomi got the message and replied, but the reply wasn't sent back
+                // This is only one kind of error, but it seems to be common enough that we
+                // Should send it back to the Discord server and let them know something happened
                 var errorResult map[string]interface{}
                 if err := json.Unmarshal(body, &errorResult); err != nil {
-                    log.Fatalf("Error unmarshalling error response. %v", err)
+                    log.Fatalf("Error unmarshalling error response: %v", err)
                 }
 
                 if errorMessage, ok := errorResult["error"].(map[string]interface{}); ok {
                     if typeValue, ok := errorMessage["type"].(string); ok {
                         if typeValue == "NoReply" {
-                            log.Print("Sending 'Replied but you did not see it' message to Discord")
+                            log.Print("'NoReply' error - Sending 'Replied but you did not see it' message to Discord")
                             // Send as a reply to the message that triggered the response, helps keep things orderly
                             _, err := s.ChannelMessageSendReply(m.ChannelID, "❌ ERROR! ❌\nI got your message and I replied to it, but the Nomi API choked and now you don't get to see what I said. I have no idea that you didn't see my response. Try saying 'Sorry, I missed what you said when I said...' and send me your message again.", m.Reference())
                             if err != nil {
-                                fmt.Println("Error sending message: ", err)
+                                fmt.Println("Error sending message to Discord: ", err)
                             }
                         }
                     }
@@ -154,17 +155,16 @@ func sendMessageToAPI(s *discordgo.Session, m *discordgo.MessageCreate) error {
 
             var result map[string]interface{}
             if err := json.Unmarshal(body, &result); err != nil {
-                log.Fatalf("Error unmarshalling response. %v", err)
+                log.Fatalf("Error unmarshalling Nomi API response: %v", err)
             }
 
             if replyMessage, ok := result["replyMessage"].(map[string]interface{}); ok {
                 log.Printf("Received reply message from Nomi API: %v\n", replyMessage)
                 if textValue, ok := replyMessage["text"].(string); ok {
-                    log.Printf("Received text value from Nomi API: %v\n", textValue)
                     // Send as a reply to the message that triggered the response, helps keep things orderly
                     _, err := s.ChannelMessageSendReply(m.ChannelID, textValue, m.Reference())
                     if err != nil {
-                        fmt.Println("Error sending message: ", err)
+                        fmt.Println("Error sending message to Discord: ", err)
                     }
                 }
             }
@@ -206,7 +206,7 @@ func main() {
 
     err = dg.Open()
     if err != nil {
-        log.Fatalf("Error opening connection: %v", err)
+        log.Fatalf("Error opening Discord connection: %v", err)
     }
 
     go queue.ProcessMessages()
