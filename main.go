@@ -211,7 +211,15 @@ func main() {
         log.Fatalf("Error opening Discord connection: %v", err)
     }
 
-    dg.UpdateCustomStatus(version + " github.com/d3tourrr/nomi-discord")
+    err = dg.UpdateStatusComplex(discordgo.UpdateStatusData{
+        Status: "online",
+        Activities: []*discordgo.Activity{
+            {
+                Name: version + " github.com/d3tourrr/nomi-discord",
+                Type: discordgo.ActivityTypeCustom,
+            },
+        },
+    })
 
     go queue.ProcessMessages()
 
