@@ -15,21 +15,21 @@ You need an instance of this Discord bot per Nomi you wish you invite to a Disco
    1. Add the bot to a server with the required permissions (at least "Read Messages" and "Send Messages")
 1. Clone this repo: `git clone https://github.com/d3tourrr/nomi-discord.git`
    1. After cloning the repo, change to the directory: `cd nomi-discord`
-1. Build the Docker image: `docker build -t nomi-discord .`
-   1. Install Docker if you haven't already got it: [Instructions](https://docs.docker.com/engine/install/)
+1. Install Docker if you haven't already got it: [Instructions](https://docs.docker.com/engine/install/)
 1. Get your Nomi API token
    1. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
    1. Copy your API key
 1. Get the Nomi ID
    * To go the View Nomi Information page for your Nomi and scroll to the very bottom
    * Or see [Nomi API Doc: Listing your Nomis](https://api.nomi.ai/docs/#listing-your-nomis))
-1. Start the Docker container
+1. Build and run the Docker container
    * Run either `start-windows-companion.ps1` on Windows (or in PowerShell) or `start-linux-companion.sh` on Linux (or in Bash, including Git Bash)
    * Or run the following commands
-     * Run the Docker container: `docker run -e DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN -e NOMI_TOKEN=$NOMI_TOKEN -e NOMI_ID=$NOMI_ID nomi-discord`
-       * Replace `$DISCORD_BOT_TOKEN` with the bot token you copied from the Discord developer portal
-       * Replace `$NOMI_TOKEN` with the API key you copied from the Nomi.ai Integrations page
-       * Replace `$NOMI_ID` with the ID for your specific Nomi, shown when you list the Nomis using the instructions linked above
+     1. Build the Docker image: `docker build -t nomi-discord .`
+     1. Run the Docker container: `docker run -e DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN -e NOMI_TOKEN=$NOMI_TOKEN -e NOMI_ID=$NOMI_ID nomi-discord`
+        * Replace `$DISCORD_BOT_TOKEN` with the bot token you copied from the Discord developer portal
+        * Replace `$NOMI_TOKEN` with the API key you copied from the Nomi.ai Integrations page
+        * Replace `$NOMI_ID` with the ID for your specific Nomi, shown when you list the Nomis using the instructions linked above
 1. Interact with your Nomi in Discord!
 
 # Interacting in Discord with your Nomi
