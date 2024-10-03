@@ -211,7 +211,7 @@ func main() {
         log.Fatalf("Error opening Discord connection: %v", err)
     }
 
-    dg.UpdateCustomStatus(version + "github.com/d3tourrr/nomi-discord")
+    dg.UpdateCustomStatus(version + " github.com/d3tourrr/nomi-discord")
 
     go queue.ProcessMessages()
 
