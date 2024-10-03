@@ -13,5 +13,5 @@ $nomiKey = Read-Host "Enter Nomi API Key"
 $nomiId = Read-Host "Enter Nomi AI ID for your companion"
 
 docker container rm $companionName -f
-docker build --platform=linux/arm64 -t $companionName $psscriptroot
-docker run -d --platform=linux/arm64 --name $companionName -e DISCORD_BOT_TOKEN=$discordToken -e NOMI_TOKEN=$nomiKey -e NOMI_ID=$nomiId $companionName
+docker build -t $companionName $psscriptroot
+docker run -d --name $companionName -e DISCORD_BOT_TOKEN=$discordToken -e NOMI_TOKEN=$nomiKey -e NOMI_ID=$nomiId $companionName

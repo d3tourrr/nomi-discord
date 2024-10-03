@@ -16,5 +16,5 @@ read -p "Enter Nomi AI ID for your companion: " nomiId
 
 scriptroot="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 docker container rm $companionName -f
-docker build --platform=linux/arm64 -t $companionName $scriptroot
-docker run -d --platform=linux/arm64 --name $companionName -e DISCORD_BOT_TOKEN=$discordToken -e NOMI_TOKEN=$nomiKey -e NOMI_ID=$nomiId $companionName
+docker build -t $companionName $scriptroot
+docker run -d --name $companionName -e DISCORD_BOT_TOKEN=$discordToken -e NOMI_TOKEN=$nomiKey -e NOMI_ID=$nomiId $companionName
