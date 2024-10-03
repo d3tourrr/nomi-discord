@@ -56,3 +56,7 @@ It's a good idea to put something like this in your Nomi's "Backstory" shared no
 You may also wish to change your Nomi's Communication Style to `Texting`.
 
 It's also a good idea to fill out the "Nickname" shared note to indicate your Discord username so that your Nomi can identify messages that come from you via Discord.
+
+---
+
+<small>I also made a nearly identical integration for Kindroid.ai companions: [github.com/d3tourrr/kin-discord](https://github.com/d3tourrr/kin-discord)</small>
