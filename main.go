@@ -14,6 +14,8 @@ import (
     "github.com/bwmarrin/discordgo"
 )
 
+var version = "v0.0.2"
+
 type QueuedMessage struct {
     Message   *discordgo.MessageCreate
     Session   *discordgo.Session
@@ -208,6 +210,8 @@ func main() {
     if err != nil {
         log.Fatalf("Error opening Discord connection: %v", err)
     }
+
+    dg.UpdateCustomStatus(version + "github.com/d3tourrr/nomi-discord")
 
     go queue.ProcessMessages()
 
