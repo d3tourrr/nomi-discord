@@ -13,9 +13,10 @@ You need an instance of this Discord bot per Nomi you wish you invite to a Disco
    1. Create a new application and then a bot under that application
    1. Copy the bot's token
    1. Add the bot to a server with the required permissions (at least "Read Messages" and "Send Messages")
+1. Install Git if you haven't already got it: [Instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+1. Install Docker if you haven't already got it: [Instructions](https://docs.docker.com/engine/install/)
 1. Clone this repo: `git clone https://github.com/d3tourrr/nomi-discord.git`
    1. After cloning the repo, change to the directory: `cd nomi-discord`
-1. Install Docker if you haven't already got it: [Instructions](https://docs.docker.com/engine/install/)
 1. Get your Nomi API token
    1. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
    1. Copy your API key
