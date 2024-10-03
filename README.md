@@ -20,8 +20,8 @@ You need an instance of this Discord bot per Nomi you wish you invite to a Disco
    1. Go to the [Integration section](https://beta.nomi.ai/profile/integrations) of the Profile tab
    1. Copy your API key
 1. Get the Nomi ID
-   * Go to the View Nomi Information page for your Nomi and scroll to the very bottom
-   * Or see [Nomi API Doc: Listing your Nomis](https://api.nomi.ai/docs/#listing-your-nomis))
+   * Go to the View Nomi Information page for your Nomi and scroll to the very bottom and copy the Nomi ID
+   * Or see [Nomi API Doc: Listing your Nomis](https://api.nomi.ai/docs/#listing-your-nomis)
 1. Build and run the Docker container
    * Run either `start-windows-companion.ps1` on Windows (or in PowerShell) or `start-linux-companion.sh` on Linux (or in Bash, including Git Bash)
    * Or run the following commands
