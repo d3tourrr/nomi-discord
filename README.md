@@ -1,5 +1,5 @@
 # ⚠️⚠️⚠️ THIS INTEGRATION IS DEPRECATED
-# GO TO GITHUB.COM/d3tourrr/NomiKin-Discord FOR THE NEW VERSION. THIS REPO IS NO LONGER MAINTAINED
+# GO TO [GITHUB.COM/d3tourrr/NomiKin-Discord](https://github.com/d3tourrr/NomiKin-Discord) FOR THE NEW VERSION. THIS REPO IS NO LONGER MAINTAINED
 # ⚠️⚠️⚠️ THIS INTEGRATION IS DEPRECATED
 
 ~~# Nomi-Discord Integration~~
