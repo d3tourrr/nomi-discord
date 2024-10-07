@@ -1,6 +1,0 @@
-# Ignore the Go build cache
-/tmp/*
-/build/*
-/bin/*
-*.exe
-*.log
